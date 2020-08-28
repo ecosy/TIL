@@ -49,7 +49,7 @@ def search(point: List[int, int], count: int, visited: List[List[int, int]]):
         # right
         # -> 이 부분에서 4방향으로 이동하는 것과 DFS 연결짓지 못했다.
 #%%
-# 책의 풀이
+# 풀이 분석
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
         def dfs(i, j):
