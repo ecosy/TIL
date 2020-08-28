@@ -78,6 +78,21 @@ def iterative_dfs(start_v):
     return visited
 ```
 
+```python
+# 직접 다시 구현해본 코드
+from typing import List
+def dfs(graph, start_v) -> List[int]:
+    visited = []
+    stack = list([start_v])
+    while stack:
+        node = stack.pop()
+        if node not in visited:
+            visited.append(node)
+            stack.extend(graph[node][::-1])
+    return visited
+dfs(graph, 1)
+```
+
 ### (3.2) BFS (Breadth-First Search)
 * 큐로 구현함
 * 그래프의 최단 경로 문제에 사용됨
@@ -98,6 +113,23 @@ def iterative_bfs(start_v):
 ```
 * 최적화를 위해 deque를 이용하여 구현 가능함
 * <U>*BFS는 재쉬로 동작하지 않음*</U>
+
+2. **Deque**을 이용한 최적화 구현
+```python
+# 직접 구현해본 코드
+from typing import List
+from collections import deque
+def bfs(graph, start_v) -> List[int]:
+    visited = []
+    queue = deque([start_v])
+    while queue:
+        node = queue.popleft()
+        if node not in visited:
+            visited.append(node)
+            queue.extend(graph[node])
+    return visited
+bfs(graph, 1)
+```
 
 ## 4. 백트래킹
 > 해결책에 대한 후보를 구축해 나아가다 가능성이 없다고 판단되면 즉시 후보를 포기(backtrank)해 정답을 찾아나가는 범용적인 알고리즘
