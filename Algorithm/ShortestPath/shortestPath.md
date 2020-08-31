@@ -69,5 +69,5 @@ dijkstra(graph, 'A')
 # result -> {'A': 0, 'B': 6, 'C': 1, 'D': 2, 'E': 5, 'F': 6}
 ```
 ##  Reference
-1. 파이썬 알고리즘 인터뷰 (저자 : 박상길) Graph 편
+1. 파이썬 알고리즘 인터뷰 (저자 : 박상길) Shortest Path 편
 2. https://www.fun-coding.org/Chapter20-shortest-live.html
