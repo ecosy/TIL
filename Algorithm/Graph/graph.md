@@ -33,7 +33,9 @@
 > 그래프 탐색 Search, 그래프의 각 정점을 방문하는 과정
 > DFS, BFS   
 
+<p align="center">
 <img src = "../../images/graph_00.png" alt='Graph' width="40%" height='40%' class='center'>  
+</p>
 
 * 그래프를 표현하는 방법
   * 인접 행렬 (Adjacency Matrix)
