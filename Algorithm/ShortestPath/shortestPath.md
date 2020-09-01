@@ -35,7 +35,7 @@ graph = {
 ```python
 import heapq
 def dijkstra(graph, start_v):
-    heap = []
+    Q = []
     # insert the inf value for all nodes in graph
     shortest_path = {node:float('inf') for node in graph}
     
@@ -43,11 +43,11 @@ def dijkstra(graph, start_v):
     shortest_path[start_v] = 0
 
     # push [distance, start_v node] into heap
-    heapq.heappush(heap, [shortest_path[start_v], start_v]) # heap <- [distance, node]
+    heapq.heappush(Q, [shortest_path[start_v], start_v]) # heap <- [distance, node]
 
-    while heap:
+    while Q:
         # pop the node with the shortest distance
-        current_distance, current_node = heapq.heappop(heap)
+        current_distance, current_node = heapq.heappop(Q)
 
         # if current distance is larger than the stored shortest distance,
         # continue
@@ -60,7 +60,7 @@ def dijkstra(graph, start_v):
 
             if new_distance < shortest_path[adjacent_node]:
                 shortest_path[adjacent_node] = new_distance
-                heapq.heappush(heap, [new_distance, adjacent_node])
+                heapq.heappush(Q, [new_distance, adjacent_node])
 
     return shortest_path
 ```
