@@ -26,7 +26,7 @@ Graph | Tree
 순환 구조, 비순환 구조 모두 허용 | 순환 구조를 갖지 않는 그래프
 단방향, 양방향 가리킬 수 있음 | 단방향만 가능함
 ---
-### (1.4) 이진 트리
+## 2. 이진 트리
 * 각 노드가 m개 이하의 자식을 갖고 있으면, m-ary 트리 (다항트리, 다진트리) 라고 함
 * 이때 m=2인 경우, 모든 노드의 차수가 2 이하일 때 이진 트리 Binary Tree 라고 함  
 
@@ -39,17 +39,87 @@ Graph | Tree
   * 모든 노드가 2개의 자식 노드를 가짐
   * 모든 리프 노드가 동일한 깊이, 레벨을 가짐
 ---
-### (1.5) 이진 탐색 트리 (Binary Search Tree)
+### (2.1) 이진 탐색 트리 (Binary Search Tree)
 * 이진 탐색 트리는 정렬된 트리임
   * 노드의 왼쪽 서브트리는 그 노드의 값보다 작은 값들을 지닌 노드로 이루어짐
   * 노드의 오른쪽 서브트리는 그 노드의 값과 같거나 큰 값들을 지닌 노드로 이루어짐
 * 탐색 시 시간복잡도 : O(log _n_)
   * 트리의 균형이 깨질 경우 O(_n_)에 근접한 시간이 소요됨
   * 따라서 균형을 맞추기 위해서 _자가 균형 이진 탐색 트리_ 가 고안됨
+
 #### 자가 균형 이진탐색 트리 (Self-Balancing Search Tree)
 > 자가 균형 (높이 균형) 이진 탐색 토리는 삽입, 삭제 시 자동으로 높이를 작게 유지하는 노드 기반의 이진 탐색 트리다.
 * (e.g.) AVL 트리, 레드-블랙 트리
   * 레드-블랙트리는 높은 효율성 때문에 실무에서도 빈번하게 사용됨
+
+---
+## 3. 트리 순회 (Tree Traversals)
+> 그래프 순회의 한 형태로 트리 자료구조에서 각 노드를 정확히 한 번 방문하는 과정
+* DFS, BFS로 탐색하며, 이진트리에서 DFS로 노드를 방문하는 순서에 따라 3가지 방식 존재함
+  * 전위 순회 (Pre-Order), (NLR)
+  * 중위 순회 (In-Order), (LNR)
+  * 후위 순회 (Post-Order), (LRN)
+
+<p align="center">
+<img src = "../../images/tree_traversal_00.png" alt='Graph' width="40%" height='40%' class='center'>  
+</p>
+
+```python
+class Node:
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+root = Node('F',
+            left = Node('B',
+                        left = Node('A'),
+                        right = Node('D',
+                                    left = Node('C'),
+                                    right = Node('E'))
+                        ),
+            right = Node('G',
+                        left = None,
+                        right = Node('I',
+                                    left = Node('H'))
+                        )
+        )
+
+```
+
+### (3.1) 전위 순회
+```python
+def preorder(node):
+  if node is None:
+    return
+  print(node.val)
+  preorder(node.left)
+  preorder(node.right)
+# result : F - B - A - D - C - E - G - I - H
+```
+
+### (3.2) 중위 순회
+```python
+def inorder(node):
+  if node is None:
+    return
+  inorder(node.left)
+  print(node.val)
+  inorder(node.right)
+# result : A - B - C - D - E - F - G - H - I
+```
+
+### (3.3) 후위 순회
+```python
+def postorder(node):
+  if node is None:
+    return
+  postorder(node.left)
+  postorder(node.right)
+  print(node.val)
+# result : A - C - E - D - B - H - I - G - F
+```
+
 ---
 ##  Reference
 1. 파이썬 알고리즘 인터뷰 (저자 : 박상길) Shortest Path 편
