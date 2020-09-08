@@ -21,13 +21,27 @@ def bubblesort(A):
 * 최선과 최악의 경우 O(nlogn)
 * 안정 정렬 (Stable Sort)
 
-```python
-
-```
-
 ## 3. 퀵 정렬 (Quick Sort)
+> 피벗을 기준으로 작으면 왼쪽, 크면 오른쪽으로 파티셔닝 하면서 쪼갠다.
+* 매우 빠르고 효율적이지만, 최악의 경우 O(n<sup>2</sup>)
 
+```python
+def quicksort(A, lo, hi):
+    def partition(lo, hi):
+        pivot = A[hi]
+        left = lo
+        for right in range(lo, hi):
+            if A[right] < pivot:
+                A[left], A[right] = A[right], A[left]
+                left += 1
+        A[left], A[hi] = A[hi], A[left]
+        return left
 
+    if lo < hi:
+        pivot = partition(lo, hi)
+        quicksort(A, lo, pivot - 1)
+        quicksort(A, pivot + 1, hi)
+```
 ---
 ## Reference
 1. 파이썬 알고리즘 인터뷰 (저자 : 박상길) Sorting 편
