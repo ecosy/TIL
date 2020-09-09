@@ -5,7 +5,6 @@
 nums = [-1,0,3,5,9,12]
 target = 9
 # %%
-
 # 1. 재귀 풀이
 from typing import List
 class Solution:
@@ -28,7 +27,6 @@ class Solution:
         return binary_search(0, len(nums) - 1)
 
 #%%
-
 # 2. 반복 풀이
 from typing import List
 class Solution:
@@ -46,7 +44,6 @@ class Solution:
         return -1
 
 #%%
-
 # 3. 이진 검색 모듈
 from typing import List
 import bisect
@@ -59,7 +56,6 @@ class Solution:
         else:
             return -1
 #%%
-
 # 4. 이진 검색을 사용하지 않는 index 풀이
 from typing import List
 class Solution:
