@@ -96,4 +96,4 @@ def fractional_knapsack(cargo):
 
 ---
 ## Reference
-1. 파이썬 알고리즘 인터뷰 (저자 : 박상길) DP 편
+1. 파이썬 알고리즘 인터뷰 (저자 : 박상길) Greedy 편

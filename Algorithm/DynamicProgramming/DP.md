@@ -13,7 +13,7 @@
 
 알고리즘 | 풀이 가능한 문제들의 특징 | 풀이 가능한 문제, 알고리즘
 --- | --- | ---
-DP | <ul><li>최적 부분 구조 (Optimal Substructure)</li> <li>중복된 하위 문제들 (Overlapping Subproblems</li></ul> | <ul><li>0-1 배낭 문제</li> <li>피보나치 수열</li> <li>다익스트라 알고리즘</li></ul>
+DP | <ul><li>최적 부분 구조 (Optimal Substructure)</li> <li>중복된 하위 문제들 (Overlapping Subproblems)</li></ul> | <ul><li>0-1 배낭 문제</li> <li>피보나치 수열</li> <li>다익스트라 알고리즘</li></ul>
 Greedy | <ul><li>최적 부분 구조 (Optimal Substructure)</li> <li>탐욕 선택 속성 (Greedy Choice Property)</li></ul> | <ul><li>분할 가능 배낭 문제</li> <li>다익스트라 알고리즘</li> 
 Divide&Conquer | <ul><li>최적 부분 구조 (Optimal Substructure)</li> | <ul><li>병합 정렬</li> <li>퀵 정렬</li> 
 
