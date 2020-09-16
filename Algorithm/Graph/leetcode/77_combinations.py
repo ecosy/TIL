@@ -61,6 +61,7 @@ class Solution:
 #%%
 
 # 책 풀이 분석 1
+# DFS로 K개 조합 생성
 
 class Solution:
     def combine(self, n: int, k: int) -> List[List[int]]:
@@ -80,3 +81,14 @@ class Solution:
 
         dfs([], 1, k)
         return results
+
+#%%
+
+# 책 풀이 분석 2
+# itertools 모듈 사용
+
+from itertools import combinations
+
+class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        return list(combinations(range(1, n + 1), k))
