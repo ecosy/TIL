@@ -2,6 +2,38 @@
 # leetcode # 17
 
 #%%
+from typing import List
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        def dfs(index, combination):
+            # digits의 모든 숫자를 다 탐색한 경우
+            if index == len(digits):
+                # 여기까지 더한 조합을 정답에 더해주기
+                answer.append(combination)
+                return
+
+            # 탐색할 digits가 남은 경우
+            else:
+                # 해당 index의 digits에 해당되는 알파벳을 조합에 더하고,
+                # 그 다음 index 탐색하기
+                for c in dic[digits[index]]:
+                    dfs(index + 1, combination + c)
+        
+        if not digits:
+            return []
+
+        answer = []
+        dic = {
+            "2" : "abc", "3" : "def", "4" : "ghi", "5" : "jkl",
+            "6" : "mno", "7" : "pqrs", "8" : "tuv", "9" : "wxyz"
+        }
+        dfs(index = 0, combination = "")
+        return answer
+#%%
+s = Solution()
+s.letterCombinations(digits='23')
+
+#%%
 
 # 책의 풀이 분석
 
