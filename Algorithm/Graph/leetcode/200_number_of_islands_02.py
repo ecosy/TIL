@@ -34,7 +34,7 @@ grid = [
 
 def dfs(i, j):
     visitied = []
-    stack = [[i, j]] # dfs 시작 좌표 삽임
+    stack = [[i, j]] # dfs 시작 좌표 삽입
 
     while stack:
         x, y = stack.pop() # x, y 좌표 방문
