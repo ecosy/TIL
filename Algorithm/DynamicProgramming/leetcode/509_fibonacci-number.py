@@ -1,5 +1,41 @@
+# https://leetcode.com/problems/fibonacci-number/
+# leetcode #509
+# 피보나치 수
+
 #%%
-# solution #1
+# My Solution 1
+# bottom up
+# tabulation
+#%%
+import collections
+def fib(n):
+    fib_num = collections.defaultdict(int)
+    fib_num[0] = 0
+    fib_num[1] = 1
+
+    for i in range(2, n  + 1):
+        fib_num[i] = fib_num[i - 1] + fib_num[i - 2]
+
+    return fib_num[n]
+fib(4)
+# %%
+# My Solution 2
+# top down
+# memorization
+fib_num = {}
+def fib(n):
+    if n <= 1:
+        return n
+
+    if n in fib_num:
+        return fib_num[n]
+
+    fib_num[n] = fib(n - 1) + fib(n - 2)
+
+    return fib_num[n]
+fib(5)
+#%%
+# 책 풀이 분석 1
 # 재귀 구조 브루트 포스
 
 class Solution:    
@@ -9,8 +45,7 @@ class Solution:
         return self.fib(N - 1) + self.fib(N - 2)
 
 #%%
-
-# solution #2
+# 책 풀이 분석 2
 # Memorization
 
 import collections
@@ -30,8 +65,7 @@ class Solution:
         return self.dp[N]
 
 #%%
-
-# solution #3
+# 책 풀이 분석 3
 # Tabulation
 
 import collections
@@ -48,8 +82,7 @@ class Solution:
         return self.dp[N]
 
 #%%
-
-# solution #4
+# 책 풀이 분석 4
 # 두 변수만 이용해 공간 절약
 
 # 공간 복잡도 : O(1)
@@ -64,8 +97,7 @@ class Solution:
         return x
 
 #%%
-
-# solution #5
+# 책 풀이 분석 5
 # 행렬
 
 # 시간복잡도 : O(log n)
