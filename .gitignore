@@ -1,2 +1,4 @@
 *.pptx
-
+*/debug.log
+*/.ipynb_checkpoints
+.ipynb_checkpoints
