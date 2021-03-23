@@ -20,7 +20,7 @@ func Test_MyFunc(t *testing.T){
 	for _, tt := range tests{
 		t.Run(tt.name, func(t *testing.T){
 			if got := MyFunc(tt.args.input); got != tt.want{
-				t.Errorf("MyFunc() = #{got}, want #{tt.want}")
+				t.Errorf("MyFunc() = %v, want %v", tt.got, tt.want)
 			}
 		})
 	}
