@@ -1,0 +1,27 @@
+package preprocess
+
+import "testing"
+
+func BenchmarkSolution1Origin(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Solution1Origin()
+	}
+}
+
+func BenchmarkSolution1GoRoutine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Solution1GoRoutine()
+	}
+}
+
+func BenchmarkSolution2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		solution2()
+	}
+}
+
+func BenchmarkSolution3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		solution3()
+	}
+}
