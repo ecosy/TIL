@@ -16,14 +16,18 @@ type transmCh struct {
 type sumVal struct {
 	milgSUM int64
 	mpgSUM  int64
+	count   int
 }
 
-var transmissionSUM map[string]sumVal
+var transmissionSUM map[string]*sumVal
+var manualCh *transmCh
+var autoCh *transmCh
+var semiAutoCH *transmCh
 
 func newTransmCh() *transmCh {
 	ch := transmCh{}
-	ch.milgCh = make(chan int, 10000)
-	ch.mpgCH = make(chan float64, 10000)
+	ch.milgCh = make(chan int, 100000)
+	ch.mpgCH = make(chan float64, 100000)
 	return &ch
 }
 
@@ -32,11 +36,10 @@ func closeTransmCh(ch *transmCh) {
 	close(ch.mpgCH)
 }
 
-func inputChannel(wg *sync.WaitGroup, manualCh, autoCh, semiAutoCH *transmCh) {
-	log.Println("inputchannel start....")
-	fileName := "audi"
-	r := readFromCSV(fileName)
+func inputChannel(wg *sync.WaitGroup, m *sync.Mutex, fileName string) {
+	defer wg.Done()
 
+	r := readFromCSV(fileName)
 	count := 0
 	for {
 		record, err := r.Read()
@@ -61,8 +64,8 @@ func inputChannel(wg *sync.WaitGroup, manualCh, autoCh, semiAutoCH *transmCh) {
 		if err != nil {
 			log.Fatalf("error strconv.Atoi record[MPG], err : %v\n", err)
 		}
-		// log.Printf("mile : %v, mpg : %v\n", mileage, mpg)
 
+		m.Lock() // acquire lock
 		switch record[TRANSMISSION] {
 		case "Manual":
 			manualCh.milgCh <- mileage
@@ -73,15 +76,11 @@ func inputChannel(wg *sync.WaitGroup, manualCh, autoCh, semiAutoCH *transmCh) {
 		case "Semi-Auto":
 			semiAutoCH.milgCh <- mileage
 			semiAutoCH.mpgCH <- mpg
-		default:
-			log.Printf("record[TRANSMISSION] is not among [manual, auto, semi-auto]\n")
+			// default:
+			// log.Printf("record[TRANSMISSION] is not among [manual, auto, semi-auto], TRANSMISSION : %v\n", TRANSMISSION)
 		}
+		m.Unlock() // release lock
 	}
-	closeTransmCh(manualCh)
-	closeTransmCh(autoCh)
-	closeTransmCh(semiAutoCH)
-	log.Println("input channel end")
-	wg.Done()
 }
 
 func printCh(wg *sync.WaitGroup, ch *transmCh) {
@@ -96,64 +95,109 @@ func printCh(wg *sync.WaitGroup, ch *transmCh) {
 }
 
 func calculateSum(wg *sync.WaitGroup, ch *transmCh, transmissionType string) {
-	var transType string = fmt.Sprintf("%sSUM", transmissionType)
+	defer func() {
+		wg.Done()
+	}()
 
+	var transType string = fmt.Sprintf("%sSUM", transmissionType) // manualSUM, autoSUM, semiAutoSUM
 	for v := range ch.milgCh {
 		transmissionSUM[transType].milgSUM += int64(v)
+		transmissionSUM[transType].count++
 	}
-	fmt.Println()
-	for v := range ch.milgCh {
-		fmt.Printf("%v ", v)
+	for v := range ch.mpgCH {
+		transmissionSUM[transType].mpgSUM += int64(v)
 	}
 }
 
-func Solution2Origin() {
-	log.Println("main start....")
+func caculateSumAVG() (int64, int64, int64, int64, int64, int64) {
+	manualMilgAVG := transmissionSUM["manualSUM"].milgSUM / int64(transmissionSUM["manualSUM"].count)
+	manualMpgAVG := transmissionSUM["manualSUM"].mpgSUM / int64(transmissionSUM["manualSUM"].count)
 
-	manualCh := newTransmCh()
-	autoCh := newTransmCh()
-	semiAutoCH := newTransmCh()
+	autoMilgAVG := transmissionSUM["autoSUM"].milgSUM / int64(transmissionSUM["autoSUM"].count)
+	autoMpgAVG := transmissionSUM["autoSUM"].mpgSUM / int64(transmissionSUM["autoSUM"].count)
 
-	transmissionSUM = map[string]sumVal{
-		"manualSUM":   sumVal{},
-		"autoSUM":     sumVal{},
-		"semiAutoSUM": sumVal{},
-	}
+	semiAutoMilgAVG := transmissionSUM["semiAutoSUM"].milgSUM / int64(transmissionSUM["semiAutoSUM"].count)
+	semiAutoMpgAVG := transmissionSUM["semiAutoSUM"].mpgSUM / int64(transmissionSUM["semiAutoSUM"].count)
 
-	// fileName := "audi"
+	// log.Printf("avg manual mileage : %v, mpg : %v\n", transmissionSUM["manualSUM"].milgSUM/int64(transmissionSUM["manualSUM"].count), transmissionSUM["manualSUM"].mpgSUM/int64(transmissionSUM["manualSUM"].count))
+	// log.Printf("avg auto mileage : %v, mpg : %v\n", transmissionSUM["autoSUM"].milgSUM/int64(transmissionSUM["autoSUM"].count), transmissionSUM["autoSUM"].mpgSUM/int64(transmissionSUM["autoSUM"].count))
+	// log.Printf("avg semiAuto mileage : %v, mpg : %v\n", transmissionSUM["semiAutoSUM"].milgSUM/int64(transmissionSUM["semiAutoSUM"].count), transmissionSUM["semiAutoSUM"].mpgSUM/int64(transmissionSUM["semiAutoSUM"].count))
+	return manualMilgAVG, manualMpgAVG, autoMilgAVG, autoMpgAVG, semiAutoMilgAVG, semiAutoMpgAVG
+}
+
+func Solution2GoRoutine() {
+
+	manualCh = newTransmCh()
+	autoCh = newTransmCh()
+	semiAutoCH = newTransmCh()
+
+	transmissionSUM = make(map[string]*sumVal)
+	transmissionSUM["manualSUM"] = &sumVal{}
+	transmissionSUM["autoSUM"] = &sumVal{}
+	transmissionSUM["semiAutoSUM"] = &sumVal{}
+
 	var wg sync.WaitGroup
-	wg.Add(1)
-	go inputChannel(&wg, manualCh, autoCh, semiAutoCH)
+	var m sync.Mutex
+
+	wg.Add(len(Brands))
+	for _, brand := range Brands {
+		go inputChannel(&wg, &m, brand)
+	}
 	wg.Wait()
+
+	closeTransmCh(manualCh)
+	closeTransmCh(autoCh)
+	closeTransmCh(semiAutoCH)
 
 	wg.Add(3)
-	go printCh(&wg, manualCh)
-	log.Println("print manualCh end")
-
-	go printCh(&wg, autoCh)
-	log.Println("print autoCh end")
-
-	go printCh(&wg, semiAutoCH)
-	log.Println("print semiAutoCH end")
-
+	go calculateSum(&wg, manualCh, "manual")
+	go calculateSum(&wg, autoCh, "auto")
+	go calculateSum(&wg, semiAutoCH, "semiAuto")
 	wg.Wait()
-	log.Println("wait end")
 
-	log.Println("main end....")
+	caculateSumAVG()
+
 	return
 }
 
-func Solution2GoRoutine() {}
+func Solution2Origin() {
 
-func solution2(fileName string) {
-	// r := readFromCSV(fileName)
+	manualCh = newTransmCh()
+	autoCh = newTransmCh()
+	semiAutoCH = newTransmCh()
+
+	transmissionSUM = make(map[string]*sumVal)
+	transmissionSUM["manualSUM"] = &sumVal{}
+	transmissionSUM["autoSUM"] = &sumVal{}
+	transmissionSUM["semiAutoSUM"] = &sumVal{}
+
+	var wg sync.WaitGroup
+	var m sync.Mutex
+
+	wg.Add(len(Brands))
+	for _, brand := range Brands {
+		inputChannel(&wg, &m, brand)
+	}
+	// wg.Wait()
+
+	closeTransmCh(manualCh)
+	closeTransmCh(autoCh)
+	closeTransmCh(semiAutoCH)
+
+	wg.Add(3)
+	calculateSum(&wg, manualCh, "manual")
+	calculateSum(&wg, autoCh, "auto")
+	calculateSum(&wg, semiAutoCH, "semiAuto")
+	// wg.Wait()
+
+	caculateSumAVG()
+
+	return
 }
 
-// [transmission]
+// 1. 3개 종류 transmission에 대한 채널 만들기 (각각 mpg, milg)
+// 2. 브랜드별 csv 파일을 파싱해서 채널에 값 넣기
+// 3. 파싱이 모두 끝나면, 채널에 쌓인 값들로 평균 계산하기
 // manual
 // automatic
 // semi auto
-
-// 각 브랜드별로 병렬처리
-// 한번만 csv 파일을 읽으면서, 각 type에 맞게, go channel에 값 넣기
-//

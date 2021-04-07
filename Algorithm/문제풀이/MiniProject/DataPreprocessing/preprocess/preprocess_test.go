@@ -14,9 +14,15 @@ func BenchmarkSolution1GoRoutine(b *testing.B) {
 	}
 }
 
-func BenchmarkSolution2(b *testing.B) {
+func BenchmarkSolution2Origin(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		solution2()
+		Solution2Origin()
+	}
+}
+
+func BenchmarkSolution2GoRoutine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Solution2GoRoutine()
 	}
 }
 
