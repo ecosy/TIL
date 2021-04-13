@@ -6,6 +6,11 @@ import (
 	"strconv"
 )
 
+/*
+[Problem 1]
+각 브랜드별 price, mpg 평균 구하기
+*/
+
 func Solution1Origin() {
 
 	for _, branch := range Brands {

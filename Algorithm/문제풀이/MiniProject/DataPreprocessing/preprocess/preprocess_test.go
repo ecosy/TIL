@@ -26,8 +26,13 @@ func BenchmarkSolution2GoRoutine(b *testing.B) {
 	}
 }
 
-func BenchmarkSolution3(b *testing.B) {
+func BenchmarkSolution3Origin(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		solution3()
+		Solution3Origin()
+	}
+}
+func BenchmarkSolution3GoRoutine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Solution3GoRoutine()
 	}
 }

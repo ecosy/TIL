@@ -21,13 +21,11 @@ const (
 )
 
 const (
-	FILE_DIR    = "./data/"
+	FILE_DIR    = "../data/"
 	FILE_FORMAT = "csv"
 )
 
 var Brands []string = []string{"audi", "bmw", "ford", "hyundi", "merc", "skoda", "toyota", "vauxhall", "vw"}
-
-func solution3() {}
 
 func Preprocess() {
 	// read csv file of brands
