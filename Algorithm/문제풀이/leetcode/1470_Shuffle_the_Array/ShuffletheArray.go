@@ -6,7 +6,6 @@ func Shuffle(nums []int, n int) []int {
 	for i := 0; i < n; i++ {
 		answer = append(answer, nums[i], nums[i+n])
 	}
-
 	return answer
 }
 
