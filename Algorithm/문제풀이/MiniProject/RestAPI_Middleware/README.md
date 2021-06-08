@@ -2,6 +2,7 @@
 ## 1. 프로젝트 소개
 * golang을 사용해서 간단한 CRUD 기능의 REST API를 개발한다.
 * Middleware - PostgreSQL을 사용한다.
+---
 
 ## 2. 사용 데이터
 * car 마다 고유한 key 값을 VIN (Vehicle Identification Number) 라고 지칭한다.
@@ -34,21 +35,31 @@ Sorento Car ID : 4a181c0a-c790-11eb-b8bc-0242ac130003
 |Sharing|5cd4cd3a-c78f-11eb-b8bc-0242ac130003|Sorento|4a181c0a-c790-11eb-b8bc-0242ac130003|63dda4ca-c790-11eb-b8bc-0242ac130003
 
 ---
-## 2. API 명세서
+## 3. API 명세서
 * URI : /api/v1/profile/car/{car_id}/vin
 * 이때 Service id는 api header의 basic token 값으로 받는다.
 
-### 1. GET
+3.1 GET
 * {car_id}에 대한 VIN 값을 리턴한다.
 
-### 2. POST
+3.2 POST
 * {car_id}에 대한 VIN 값을 입력받아 저장한다.
 
-### 3. PUT
+3.3 PUT
 * {car_id}에 대한 VIN 값을 입력받아 기존 값을 수정한다.
 
-### 4. DELETE
+3.4 DELETE
 * {car_id}에 대한 VIN 값을 삭제한다.
 
 ---
-## 3. Database - ERD
+## 4. Database - ERD
+4.1 service table
+* column : service id(PK), service name, service secret
+
+4.2 car table
+* column : VIN (PK), car type
+
+4.3 map_service_car table
+* column : car id (PK), service id (FK), VIN (FK)
+
+---
